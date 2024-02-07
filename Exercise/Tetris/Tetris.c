@@ -304,6 +304,8 @@ void DeleteLines(int startOffsetX, int startOffsetY)
 {
     Sound lineClearMusic = LoadSound("./CompletedLine.wav"); //sound for a completed line
     SetSoundVolume(lineClearMusic, 0.1f);
+    float timerDeleteLines = .3f;
+    float timer = timerDeleteLines;
     int count = 0;
     int startDeleteOffsetY;
     for (int y = 0; y < STAGE_HEIGHT - 1; y++)
@@ -330,7 +332,7 @@ void DeleteLines(int startOffsetX, int startOffsetY)
             for (int x = 1; x < STAGE_WIDTH - 1; x++)
             {               
                 const int offset = y * STAGE_WIDTH + x;
-                stage[offset] = 9;               
+                stage[offset] = 9;  //white color             
             }
             
         }
@@ -339,33 +341,31 @@ void DeleteLines(int startOffsetX, int startOffsetY)
     if (count > 0)
     {
         PlaySound(lineClearMusic); 
-        BeginDrawing();
-
-        for (int z = 0; z < STAGE_HEIGHT; z++)
+        while(timer >=0)
         {
-            for (int x = 0; x < STAGE_WIDTH; x++)
-            {
-                const int offset = z * STAGE_WIDTH + x;
-                const int color = stage[offset];
-                
-               
-                if (stage[offset] != 0)
+           BeginDrawing();
+            
+           for (int z = 0; z < STAGE_HEIGHT; z++)
+           {
+                for (int x = 0; x < STAGE_WIDTH; x++)
                 {
-                    DrawRectangle(x * TILE_SIZE + startOffsetX, z * TILE_SIZE + startOffsetY, TILE_SIZE, TILE_SIZE, colorTypes[color - 1]);
-                    DrawRectangleLines(x * TILE_SIZE + startOffsetX, z * TILE_SIZE + startOffsetY, TILE_SIZE, TILE_SIZE, BLACK);
-                }
-
-            }
+                 const int offset = z * STAGE_WIDTH + x;
+                 const int color = stage[offset];
+                 
+                
+                  if (stage[offset] != 0)
+                   {
+                      DrawRectangle(x * TILE_SIZE + startOffsetX, z * TILE_SIZE + startOffsetY, TILE_SIZE, TILE_SIZE, colorTypes[color - 1]);
+                     DrawRectangleLines(x * TILE_SIZE + startOffsetX, z * TILE_SIZE + startOffsetY, TILE_SIZE, TILE_SIZE, BLACK);
+                   }
+                } 
+           }
+           EndDrawing();
+           timer -= GetFrameTime();
         }
+        // timer for deletelines "animation"
+        timer = timerDeleteLines;
 
-        EndDrawing();
-        //timer for deletelines "animation"
-        time_t startTime = time(NULL);
-        while (difftime(time(NULL), startTime) < 1.0)
-        {
-
-        }
-     
         //when you complete one or more lines the score increases
         for (int i = 0; i < count; i++)
         {
@@ -375,7 +375,7 @@ void DeleteLines(int startOffsetX, int startOffsetY)
             ResetLines(y);
         }   
         score += (scoreLines * count);
-    }    
+    }  
 }
 
 int main(int argc, char **argv, char **environ)
@@ -444,9 +444,9 @@ int main(int argc, char **argv, char **environ)
             if (score - lvlScore == 0)
             {
                 //logic to move the tetromino faster based on your score
-                moveTetrominoDownTimer-=0.20f;
+                moveTetrominoDownTimer-=0.200f;
                 TraceLog(LOG_INFO, "Velocity :  = %d", moveTetrominoDownTimer );
-                lvlScore += 50;
+                lvlScore += 20;
             }
             
             //your score

@@ -138,6 +138,7 @@ int main(int argc, char **argv)
     aiv_set_insert(&myset, "Rome");
     aiv_set_insert(&myset, "Milan");
     aiv_set_insert(&myset, "Florence");
+    aiv_set_insert(&myset, "Florence");
     aiv_set_insert(&myset, "Naples");
     aiv_set_insert(&myset, "Palermo");
     aiv_set_insert(&myset, "Turin");
