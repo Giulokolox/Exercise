@@ -1,0 +1,1 @@
+clang.exe -o .\set.exe sets.C
