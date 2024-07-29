@@ -1,1 +1,0 @@
-clang.exe -o  LinkedList.exe LinkedList.c -l raylibdll
